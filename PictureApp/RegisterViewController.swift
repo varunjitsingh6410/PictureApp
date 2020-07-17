@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class RegisterViewController: UIViewController {
     
@@ -14,6 +15,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var tfPasswordReg: UITextField!
     @IBOutlet weak var tfConfirmPassword: UITextField!
     
+    var handle: AuthStateDidChangeListenerHandle?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,19 +23,24 @@ class RegisterViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
+          // ...
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        Auth.auth().removeStateDidChangeListener(handle!)
+    }
     
     @IBAction func btnSignUp(_ sender: Any) {
+        Auth.auth().createUser(withEmail: tfEmailReg.text!, password: tfPasswordReg.text!) { authResult, error in
+          // ...
+        }
+        //performSegue(withIdentifier: "RegisterToLogin", sender: self)
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController")
+        newViewController.modalPresentationStyle = .overCurrentContext
+        present(newViewController, animated: true, completion: nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -23,7 +23,10 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func btnRegister(_ sender: Any) {
-        performSegue(withIdentifier: "LoginToRegister", sender: sender)
+        //performSegue(withIdentifier: "LoginToRegister", sender: sender)
+        let newViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RegisterViewController")
+        newViewController.modalPresentationStyle = .overCurrentContext
+        present(newViewController, animated: true, completion: nil)
     }
     
     @IBAction func btnLogin(_ sender: Any) {
